@@ -53,7 +53,9 @@ def create_relation_holidayvsnon(df):
         st.write("There is no significant correlation between holiday and bike rentals (fail to reject the null hypothesis).")
 
 
-day_df = pd.read_csv("data/day.csv")
+
+# finalProject/Submission3/data/day.csv
+day_df = pd.read_csv("finalProject/Submission3/data/day.csv")
 
 day_df["dteday"] = pd.to_datetime(day_df['dteday'])
 
@@ -66,7 +68,7 @@ max_date = day_df['dteday'].max()
 
 with st.sidebar:
     # logo disini nnti
-    st.image("data/bicycle.png",width=150)
+    st.image("finalProject/Submission3/data/bicycle.png",width=150)
 
     st.write("This is bike-sharing rent data from 2011 to 2012")
 
