@@ -55,8 +55,8 @@ def create_relation_holidayvsnon(df):
 
 
 # finalProject/Submission3/data/day.csv
-# day_df = pd.read_csv("finalProject/Submission3/data/day.csv")
-day_df = pd.read_csv("/home/nadia/Documents/DICODING/DataAnalysis with Python/finalProject/Submission3/data/day.csv")
+day_df = pd.read_csv("finalProject/Submission3/data/day.csv")
+# day_df = pd.read_csv("/home/nadia/Documents/DICODING/DataAnalysis with Python/finalProject/Submission3/data/day.csv")
 
 day_df["dteday"] = pd.to_datetime(day_df['dteday'])
 
@@ -72,8 +72,8 @@ end_date = max_date
 
 with st.sidebar:
     # logo disini nnti
-    # st.image("finalProject/Submission3/data/bicycle.png",width=150)
-    st.image("/home/nadia/Documents/DICODING/DataAnalysis with Python/finalProject/Submission3/data/bicycle.png",width=150)
+    st.image("finalProject/Submission3/data/bicycle.png",width=150)
+    # st.image("/home/nadia/Documents/DICODING/DataAnalysis with Python/finalProject/Submission3/data/bicycle.png",width=150)
 
     st.write("This is bike-sharing rent data from 2011 to 2012")
 
