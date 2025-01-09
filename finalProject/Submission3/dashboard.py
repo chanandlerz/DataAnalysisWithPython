@@ -55,7 +55,8 @@ def create_relation_holidayvsnon(df):
 
 
 # finalProject/Submission3/data/day.csv
-day_df = pd.read_csv("finalProject/Submission3/data/day.csv")
+# day_df = pd.read_csv("finalProject/Submission3/data/day.csv")
+day_df = pd.read_csv("/home/nadia/Documents/DICODING/DataAnalysis with Python/finalProject/Submission3/data/day.csv")
 
 day_df["dteday"] = pd.to_datetime(day_df['dteday'])
 
@@ -66,19 +67,31 @@ day_df.reset_index(inplace=True)
 min_date = day_df['dteday'].min()
 max_date = day_df['dteday'].max()
 
+start_date = min_date
+end_date = max_date
+
 with st.sidebar:
     # logo disini nnti
-    st.image("finalProject/Submission3/data/bicycle.png",width=150)
+    # st.image("finalProject/Submission3/data/bicycle.png",width=150)
+    st.image("/home/nadia/Documents/DICODING/DataAnalysis with Python/finalProject/Submission3/data/bicycle.png",width=150)
 
     st.write("This is bike-sharing rent data from 2011 to 2012")
 
-    start_date, end_date = st.date_input(
+    date_range = st.date_input(
         label='Rentang Waktu',min_value=min_date,
         max_value=max_date,
         value=[min_date, max_date]
     )
 
+    if len(date_range) == 2:
+        start_date, end_date = date_range
+    elif len(date_range) == 1: 
+        start_date = date_range[0]
+        end_date = max_date
+    else:
+        st.error("Please select both start and end dates.")
 
+    
 main_df = day_df[(day_df["dteday"]>= str(start_date)) & (day_df["dteday"] <= str(end_date))]
 
 rfm_df = create_rfm_df(main_df, day_df)
