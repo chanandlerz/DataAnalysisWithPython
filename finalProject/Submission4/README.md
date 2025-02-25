@@ -15,6 +15,12 @@ pip install -r requirements.txt
 jupyter notebook
 ```
 
+## Link deployment streamlit
+```
+https://bike-sharing-rental-chanandlerz.streamlit.app/
+```
+
+
 ## Run steamlit app
 ```
 streamlit run dashboard.py

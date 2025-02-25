@@ -52,7 +52,22 @@ def create_relation_holidayvsnon(df):
     else:
         st.write("There is no significant correlation between holiday and bike rentals (fail to reject the null hypothesis).")
 
-
+def calculate_churn_risk(rfm_df, recency_threshold=90, frequency_threshold=1):
+    """
+    Menentukan jumlah pelanggan yang berisiko churn berdasarkan RFM analysis.
+    
+    Args:
+        rfm_df (DataFrame): DataFrame hasil RFM analysis.
+        recency_threshold (int): Ambang batas hari sejak transaksi terakhir untuk dikategorikan sebagai churn.
+        frequency_threshold (int): Ambang batas jumlah transaksi minimum.
+    
+    Returns:
+        int: Jumlah pelanggan berisiko churn.
+    """
+    churn_customers = rfm_df[
+        (rfm_df['recency'] > recency_threshold) & (rfm_df['frequency'] <= frequency_threshold)
+    ]
+    return churn_customers.shape[0]
 
 # finalProject/Submission3/data/day.csv
 day_df = pd.read_csv("finalProject/Submission3/data/day.csv")
@@ -126,6 +141,11 @@ ax.tick_params(axis='y', labelsize=20)
 ax.tick_params(axis='x', labelsize=15)
  
 st.pyplot(fig)
+
+st.subheader("Customer Churn Risk Analysis")
+
+churn_risk_count = calculate_churn_risk(rfm_df)
+st.metric("Churn Risk Customers", value=churn_risk_count)
 
 st.subheader('Daily Bike-Rent by Temperature')
 

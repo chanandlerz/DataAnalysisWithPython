@@ -142,7 +142,6 @@ ax.tick_params(axis='x', labelsize=15)
  
 st.pyplot(fig)
 
-# Tambahkan perhitungan churn risk ke dalam dashboard
 st.subheader("Customer Churn Risk Analysis")
 
 churn_risk_count = calculate_churn_risk(rfm_df)
