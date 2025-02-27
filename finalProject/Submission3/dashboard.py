@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+import plotly.express as px
 from scipy.stats import linregress
 from scipy.stats import ttest_ind
 sns.set(style='dark')
@@ -142,10 +143,6 @@ ax.tick_params(axis='x', labelsize=15)
  
 st.pyplot(fig)
 
-st.subheader("Customer Churn Risk Analysis")
-
-churn_risk_count = calculate_churn_risk(rfm_df)
-st.metric("Churn Risk Customers", value=churn_risk_count)
 
 st.subheader('Daily Bike-Rent by Temperature')
 
@@ -164,6 +161,74 @@ st.pyplot(fig)
 # fig,ax = plt.scatter(x=temp_cnt_df['temp'],y=temp_cnt_df['cnt'])
 # ax.plot(temp_cnt_df['temp'],temp_cnt_df['cnt'])
 # st.pyplot(fig)
+
+# menambahkan manual grouping 
+def categorize_temp(temp):
+    if temp < 0.3:
+        return 'Cold'
+    elif temp <= 0.6:
+        return 'Normal'
+    else:
+        return 'Hot'
+
+def categorize_weather(weather):
+    return 'Good' if weather in [1, 2] else 'Bad'
+
+def categorize_season(season):
+    return 'Cold' if season in [3,4] else 'Hot'
+
+def categorize_humidity(hum):
+    if hum < 0.4:
+        return 'Dry'
+    elif hum <= 0.7:
+        return 'Normal'
+    else:
+        return 'Humid'
+
+def categorize_day(holiday, workingday):
+    if holiday == 1:
+        return 'Holiday'
+    elif workingday == 1:
+        return 'Working Day'
+    else:
+        return 'Weekend'
+
+main_df['Temp_Group'] = main_df['temp'].apply(categorize_temp)
+main_df['Weather_Group'] = main_df['weathersit'].apply(categorize_weather)
+main_df['Season_Group'] = main_df['season'].apply(categorize_season)
+main_df['Humidity_Group'] = main_df['hum'].apply(categorize_humidity)
+main_df['Day_Type'] = main_df.apply(lambda x: categorize_day(x['holiday'], x['workingday']), axis=1)
+
+df_temp = main_df.groupby('Temp_Group')[['cnt']].sum().reset_index()
+df_weather = main_df.groupby('Weather_Group')[['cnt']].sum().reset_index()
+df_season = main_df.groupby('Season_Group')[['cnt']].sum().reset_index()
+df_humidity = main_df.groupby('Humidity_Group')[['cnt']].sum().reset_index()
+df_day = main_df.groupby('Day_Type')[['cnt']].sum().reset_index()
+
+st.title("Bike Rental Grouping")
+
+tabs = st.tabs(["Temperature", "Weather", "Season", "Humidity", "Day Type"])
+
+tabs[0].write(df_temp)
+tabs[1].write(df_weather)
+tabs[2].write(df_season)
+tabs[3].write(df_humidity)
+tabs[4].write(df_day)
+
+fig_temp = px.bar(df_temp, x='Temp_Group', y='cnt', title='Rentals by Temperature', color='Temp_Group')
+fig_weather = px.bar(df_weather, x='Weather_Group', y='cnt', title='Rentals by Weather', color='Weather_Group')
+fig_season = px.bar(df_season, x='Season_Group', y='cnt', title='Rentals by Season', color='Season_Group')
+fig_humidity = px.bar(df_humidity, x='Humidity_Group', y='cnt', title='Rentals by Humidity', color='Humidity_Group')
+fig_day = px.bar(df_day, x='Day_Type', y='cnt', title='Rentals by Day Type', color='Day_Type')
+
+tabs[0].plotly_chart(fig_temp)
+tabs[1].plotly_chart(fig_weather)
+tabs[2].plotly_chart(fig_season)
+tabs[3].plotly_chart(fig_humidity)
+tabs[4].plotly_chart(fig_day)
+
+###
+
 
 fig,ax = plt.subplots(figsize=(16,8))
 ax.scatter(x=temp_cnt_df['temp'],y=temp_cnt_df['cnt'])
